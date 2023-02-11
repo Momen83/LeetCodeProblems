@@ -1,0 +1,26 @@
+class Solution {
+public:
+int dp[5001][3] ;
+int solve(vector<int>prices,int idx,int isBuy){
+    if(idx>=prices.size()){
+        return 0;
+    }
+    int &ret = dp[idx][isBuy];
+    if(ret!=-1)return ret;
+    int take =0,leave =0;
+    if(!isBuy){
+        take = solve(prices , idx+1 ,1) - prices[idx];
+        leave = solve(prices , idx+1 , 0);
+    }
+    else{
+        take = solve(prices , idx+2 ,0) +prices[idx];
+        leave = solve(prices , idx+1 , 1);
+    }
+    return ret = max(leave , take);
+
+}
+    int maxProfit(vector<int>& prices) {
+        memset(dp,-1,sizeof (dp));
+        return solve(prices,0,0);
+    }
+};
