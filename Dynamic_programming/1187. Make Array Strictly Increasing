@@ -1,0 +1,34 @@
+class Solution {
+public:
+    map<pair<int,int>,int>memo;
+    int solve(vector<int>& arr1, vector<int>& arr2,int index , int prev) {
+         if(index ==arr1.size()) {
+             return 0;
+         }
+         if(memo.find({index,prev}) !=memo.end())return memo[{index,prev}];
+         int ans = 2001;
+
+         if(arr1[index] >prev) {
+              // option 1 : go to next element without any change
+
+              ans = solve(arr1,arr2,index + 1 ,arr1[index]);
+    
+         }
+           // option 2 : replace the current element with least element greatest than previous element
+
+            if(arr2.back() >prev) {
+                 int pos = lower_bound(arr2.begin() ,arr2.end() , prev + 1) - arr2.begin();
+                 ans = min(ans , solve(arr1,arr2,index + 1,arr2[pos]) + 1);
+             }
+      
+            
+         memo[{index,prev}] = ans;
+         return ans;
+    }
+    int makeArrayIncreasing(vector<int>& arr1, vector<int>& arr2) {
+  
+        sort(arr2.begin() ,arr2.end());
+        int ans = solve(arr1,arr2,0,-1);
+        return  ans ==2001 ?-1 :ans;
+    }
+};
