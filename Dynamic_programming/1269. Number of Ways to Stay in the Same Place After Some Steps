@@ -1,0 +1,39 @@
+class Solution {
+public:
+    const int Mod = 1e9 + 7;
+    vector<vector<int>>memo;
+    int sz;
+    int solve(int index , int steps ) {
+        if(!steps) {
+            return !index;
+        }
+        
+        int &ret = memo[index][steps];
+        
+        if(ret != -1) {
+            return ret;
+        }
+        
+        // stay
+        ret  = solve(index , steps - 1) %Mod;
+        // Move Right
+        if(index + 1 < sz) {
+              ret  = ((ret %  Mod) + (solve(index + 1 , steps - 1) %Mod))%Mod;
+        }
+        // Move Left
+         if(index - 1 >= 0) {
+              ret  = ((ret %  Mod) + (solve(index - 1 , steps - 1) %Mod))%Mod;
+        }
+        
+        return  ret % Mod;
+    }
+    int numWays(int steps, int arrLen) {
+        sz = min(arrLen , (steps / 2) + 1);
+
+         memo = vector<vector<int>>(sz , 
+                                   vector<int>(steps + 1,-1)
+                                   );
+        
+        return solve(0,steps);
+    }
+};1269. Number of Ways to Stay in the Same Place After Some Steps
