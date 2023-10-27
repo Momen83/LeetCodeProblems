@@ -1,0 +1,44 @@
+class Solution {
+public:
+    const int Mod = 1e9 + 7;
+    int numFactoredBinaryTrees(vector<int>& arr) {
+        map<int,long long>dp;
+        for(int i = 0 ; i < arr.size() ; i++) {
+              dp[arr[i]] = 1;
+        }
+        for(auto e : dp) {
+            int number = e.first;
+            
+            for(int el = 2 ; el * el <= number ; el++) {
+                
+                if( number % el == 0) {
+
+                    int numb1 = el;
+                    int numb2 = number / el;
+                    
+                    if(dp.find(numb1) != dp.end()
+                       && dp.find(numb2) != dp.end()
+                      )
+                        
+                    {
+
+                    
+                    if(numb1 == numb2)
+                        dp[number] += dp[numb1] * dp[numb1];
+                    else 
+                        dp[number] += dp[numb1] * dp[numb2] * 2;
+                    }
+                }
+            }
+        
+        }
+        int ans = 0;
+        for(auto e : dp) {
+            
+            ans =  ((ans%Mod) + (e.second % Mod) ) % Mod;
+        }
+   
+
+        return ans;
+    }
+};
