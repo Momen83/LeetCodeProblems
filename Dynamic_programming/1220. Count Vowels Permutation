@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int dp[20001][5];
+    const int mod = 1e9 + 7;
+    vector<int>pos[5];
+    int solve(int &n,int index , int curr) {
+        if(index == n - 1) {
+            return 1;
+        }
+
+        int &ret = dp[index][curr];
+
+        if(ret != -1) {
+            return ret;
+        }
+        ret = 0;
+       
+       for(auto p : pos[curr]) {
+              ret = ((ret % mod) + (solve(n,index + 1 ,p) % mod)) % mod;
+       }
+     
+
+        return ret;
+       
+    }
+    int countVowelPermutation(int n) {
+            // 0 is a
+            // 1 is e
+            // 2 is i
+            // 3 is o
+            // 4 is u
+            pos[0].push_back(1);
+
+            pos[1].push_back(0);
+            pos[1].push_back(2);
+
+            pos[2].push_back(0);
+            pos[2].push_back(1);
+            pos[2].push_back(3);
+            pos[2].push_back(4);
+
+            pos[3].push_back(2);
+            pos[3].push_back(4);
+
+            pos[4].push_back(0);
+
+            memset(dp , -1 ,sizeof(dp));
+            int ans = 0;
+
+            for(int c = 0 ; c < 5 ; c++) {
+
+                ans = ((ans % mod) + (solve(n,0,c) %mod)) %mod;
+            }
+
+            return ans;
+
+    }
+};
